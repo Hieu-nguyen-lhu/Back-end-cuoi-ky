@@ -65,3 +65,4 @@ C:\Users\nguyenduchieu\Downloads\Lập trình\back-end-ck\back_end_cuoi_ky\obj\D
 C:\Users\nguyenduchieu\Downloads\Lập trình\back-end-ck\back_end_cuoi_ky\obj\Debug\net8.0\back_end_cuoi_ky.pdb
 C:\Users\nguyenduchieu\Downloads\Lập trình\back-end-ck\back_end_cuoi_ky\obj\Debug\net8.0\back_end_cuoi_ky.genruntimeconfig.cache
 C:\Users\nguyenduchieu\Downloads\Lập trình\back-end-ck\back_end_cuoi_ky\obj\Debug\net8.0\ref\back_end_cuoi_ky.dll
+C:\Users\nguyenduchieu\Downloads\Lập trình\back-end-ck\back_end_cuoi_ky\obj\Debug\net8.0\back_end_cuoi_ky.sourcelink.json
