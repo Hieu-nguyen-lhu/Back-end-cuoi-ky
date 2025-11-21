@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\back_end_cuoi_ky\\back_end_cuoi_ky.csproj": {}
+    "D:\\Back-end_CuoiKy\\Back-end-cuoi-ky\\back_end_cuoi_ky.csproj": {}
   },
   "projects": {
-    "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\back_end_cuoi_ky\\back_end_cuoi_ky.csproj": {
+    "D:\\Back-end_CuoiKy\\Back-end-cuoi-ky\\back_end_cuoi_ky.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\back_end_cuoi_ky\\back_end_cuoi_ky.csproj",
+        "projectUniqueName": "D:\\Back-end_CuoiKy\\Back-end-cuoi-ky\\back_end_cuoi_ky.csproj",
         "projectName": "back_end_cuoi_ky",
-        "projectPath": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\back_end_cuoi_ky\\back_end_cuoi_ky.csproj",
-        "packagesPath": "C:\\Users\\nguyenduchieu\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\back_end_cuoi_ky\\obj\\",
+        "projectPath": "D:\\Back-end_CuoiKy\\Back-end-cuoi-ky\\back_end_cuoi_ky.csproj",
+        "packagesPath": "C:\\Users\\MSI\\.nuget\\packages\\",
+        "outputPath": "D:\\Back-end_CuoiKy\\Back-end-cuoi-ky\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "D:\\visual\\tools\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\nguyenduchieu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\MSI\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -39,12 +43,17 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[6.*, )"
@@ -87,7 +96,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
