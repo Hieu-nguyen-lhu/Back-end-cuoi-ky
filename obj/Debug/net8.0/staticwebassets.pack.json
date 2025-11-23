@@ -1,0 +1,45 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\BackEnd_CuoiKy\\Back-end-cuoi-ky\\wwwroot\\css\\login.css",
+      "PackagePath": "staticwebassets\\css\\login.css"
+    },
+    {
+      "Id": "C:\\BackEnd_CuoiKy\\Back-end-cuoi-ky\\wwwroot\\css\\product.css",
+      "PackagePath": "staticwebassets\\css\\product.css"
+    },
+    {
+      "Id": "C:\\BackEnd_CuoiKy\\Back-end-cuoi-ky\\wwwroot\\js\\login.js",
+      "PackagePath": "staticwebassets\\js\\login.js"
+    },
+    {
+      "Id": "C:\\BackEnd_CuoiKy\\Back-end-cuoi-ky\\wwwroot\\js\\product.js",
+      "PackagePath": "staticwebassets\\js\\product.js"
+    },
+    {
+      "Id": "C:\\BackEnd_CuoiKy\\Back-end-cuoi-ky\\wwwroot\\login.html",
+      "PackagePath": "staticwebassets\\login.html"
+    },
+    {
+      "Id": "C:\\BackEnd_CuoiKy\\Back-end-cuoi-ky\\wwwroot\\product.html",
+      "PackagePath": "staticwebassets\\product.html"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.back_end_cuoi_ky.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.back_end_cuoi_ky.props",
+      "PackagePath": "build\\back_end_cuoi_ky.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.back_end_cuoi_ky.props",
+      "PackagePath": "buildMultiTargeting\\back_end_cuoi_ky.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.back_end_cuoi_ky.props",
+      "PackagePath": "buildTransitive\\back_end_cuoi_ky.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

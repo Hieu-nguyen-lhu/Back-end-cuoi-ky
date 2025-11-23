@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menu Trà Sữa Ngon Nhất Lớp</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/product.css">
+</head>
+<body>
+
+  <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+
+  <div class="user-info">
+    Chào <span id="username">...</span> (<span id="role">...</span>)
+    <button class="btn-logout" onclick="dangXuat()">Đăng xuất</button>
+  </div>
+
+  <div class="container">
+    <header class="header-menu">
+      <h1>Menu Trà Sữa Ngon Nhất Lớp</h1>
+      <p>Chọn món yêu thích của bạn nào!</p>
+      <button id="btnAdd" class="btn-add-product" onclick="moModalThem()">+ Thêm Sản Phẩm Mới</button>
+    </header>
+
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
+
+  <!-- MODAL THÊM S-sẢN PHẨM -->
+  <div id="modalThem" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="dongModal()">×</span>
+      <h2>Thêm Sản Phẩm Mới</h2>
+
+      <!-- Tên sản phẩm -->
+      <div class="input-row">
+        <input type="text" id="tenSP" placeholder="Tên sản phẩm (bắt buộc)" required />
+      </div>
+
+      <!-- Giá tiền -->
+      <div class="input-row">
+        <input type="text" id="giaSP" placeholder="Giá tiền (VNĐ)" inputmode="numeric" pattern="[0-9]*" required />
+      </div>
+
+      <!-- TỒN KHO – GIỐNG HỆT Ô TÊN SẢN PHẨM -->
+      <div class="input-row">
+        <input type="text" id="tonKhoSP" placeholder="Tồn kho" inputmode="numeric" pattern="[0-9]*" required />
+      </div>
+
+      <!-- Mô tả -->
+      <div class="input-row">
+        <textarea id="moTaSP" placeholder="Mô tả (không bắt buộc)" rows="3"></textarea>
+      </div>
+
+      <!-- Upload ảnh -->
+      <div class="upload-area" id="uploadArea">
+        <p>Kéo thả ảnh vào đây hoặc bấm để chọn</p>
+        <input type="file" id="anhSP" accept="image/*" />
+      </div>
+      <div id="preview" class="preview-img"></div>
+
+      <div class="modal-buttons">
+        <button class="btn-buy" onclick="luuSanPhamMoi()">Thêm Ngay</button>
+        <button class="btn-cancel" onclick="dongModal()">Hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/product.js"></script>
+</body>
+</html>

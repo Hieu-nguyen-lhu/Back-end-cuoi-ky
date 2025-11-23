@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Đăng Nhập - Quán Nước Ngon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+  <div class="bubble" style="width:90px;height:90px;left:10%;animation-duration:18s;"></div>
+  <div class="bubble" style="width:130px;height:130px;left:25%;animation-duration:22s;animation-delay:3s;"></div>
+  <div class="bubble" style="width:70px;height:70px;left:60%;animation-duration:16s;animation-delay:6s;"></div>
+  <div class="bubble" style="width:110px;height:110px;left:85%;animation-duration:20s;animation-delay:9s;"></div>
+
+  <div class="login-box">
+    <h1>Quán Nước Ngon</h1>
+    <p>Hệ thống quản lý</p>
+
+    <input type="text" id="username" placeholder="Tên đăng nhập" required />
+    <input type="password" id="password" placeholder="Mật khẩu" required />
+    <button id="btnLogin">Đăng Nhập Ngay</button>
+
+    <div id="msg" class="message"></div>
+
+    <div class="test-account">
+      Test nhanh:<br>
+      <b>Admin:</b> admin / 123<br>
+      <b>User:</b> user / 321
+    </div>
+  </div>
+
+  <script src="js/login.js"></script>
+</body>
+</html>

@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Back-end_CuoiKy\\Back-end-cuoi-ky\\back_end_cuoi_ky.csproj": {}
+    "C:\\BackEnd_CuoiKy\\Back-end-cuoi-ky\\back_end_cuoi_ky.csproj": {}
   },
   "projects": {
-    "D:\\Back-end_CuoiKy\\Back-end-cuoi-ky\\back_end_cuoi_ky.csproj": {
+    "C:\\BackEnd_CuoiKy\\Back-end-cuoi-ky\\back_end_cuoi_ky.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Back-end_CuoiKy\\Back-end-cuoi-ky\\back_end_cuoi_ky.csproj",
+        "projectUniqueName": "C:\\BackEnd_CuoiKy\\Back-end-cuoi-ky\\back_end_cuoi_ky.csproj",
         "projectName": "back_end_cuoi_ky",
-        "projectPath": "D:\\Back-end_CuoiKy\\Back-end-cuoi-ky\\back_end_cuoi_ky.csproj",
-        "packagesPath": "C:\\Users\\MSI\\.nuget\\packages\\",
-        "outputPath": "D:\\Back-end_CuoiKy\\Back-end-cuoi-ky\\obj\\",
+        "projectPath": "C:\\BackEnd_CuoiKy\\Back-end-cuoi-ky\\back_end_cuoi_ky.csproj",
+        "packagesPath": "C:\\Users\\lemin\\.nuget\\packages\\",
+        "outputPath": "C:\\BackEnd_CuoiKy\\Back-end-cuoi-ky\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "D:\\visual\\tools\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\MSI\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Users\\lemin\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -43,8 +39,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
         "net8.0": {
@@ -96,7 +91,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.305/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

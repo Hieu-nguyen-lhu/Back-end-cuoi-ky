@@ -1,0 +1,83 @@
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Poppins',sans-serif; background:linear-gradient(135deg,#667eea,#764ba2); min-height:100vh; color:white; overflow-x:hidden; position:relative; }
+
+.bubble { position:fixed; bottom:-100px; background:rgba(255,255,255,0.12); border-radius:50%; pointer-events:none; z-index:0; animation:float 15s infinite linear; }
+.bubble:nth-child(1){width:100px;height:100px;left:10%;animation-duration:18s}
+.bubble:nth-child(2){width:140px;height:140px;left:25%;animation-duration:22s;animation-delay:2s}
+.bubble:nth-child(3){width:80px;height:80px;left:60%;animation-duration:16s;animation-delay:5s}
+.bubble:nth-child(4){width:120px;height:120px;left:80%;animation-duration:20s;animation-delay:8s}
+@keyframes float {0%{transform:translateY(0) rotate(0deg);opacity:.7}100%{transform:translateY(-120vh) rotate(360deg);opacity:0}}
+
+.user-info { position:fixed; top:20px; right:30px; background:rgba(255,255,255,0.2); padding:12px 28px; border-radius:50px; backdrop-filter:blur(12px); z-index:100; display:flex; align-items:center; gap:15px; font-size:16px; }
+.btn-logout { background:rgba(255,255,255,0.25); border:none; padding:10px 20px; border-radius:50px; color:white; cursor:pointer; }
+
+.container { position:relative; z-index:1; max-width:1400px; margin:0 auto; padding:40px 20px; text-align:center; }
+.header-menu h1 { font-size:46px; text-shadow:0 6px 20px rgba(0,0,0,0.6); background:linear-gradient(90deg,#fff,#a0c0ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.btn-add-product { margin:20px; padding:16px 40px; background:#ff6b9d; border:none; border-radius:50px; color:white; font-size:18px; cursor:pointer; box-shadow:0 10px 30px rgba(255,107,157,0.5); }
+
+.products-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:35px; padding:40px 0; }
+.product-card { background:rgba(255,255,255,0.15); border-radius:28px; overflow:hidden; backdrop-filter:blur(14px); box-shadow:0 12px 35px rgba(0,0,0,0.4); transition:all .4s; }
+.product-card:hover { transform:translateY(-15px); }
+.card-image { height:300px; overflow:hidden; }
+.card-image img { width:100%; height:100%; object-fit:cover; transition:.6s; }
+.product-card:hover img { transform:scale(1.12); }
+.card-content { padding:25px; text-align:center; }
+.price-actions { display:flex; justify-content:space-between; align-items:center; margin-top:15px; }
+.price { font-size:28px; font-weight:700; color:#00f0ff; }
+.btn-buy { padding:13px 30px; background:linear-gradient(90deg,#00f0ff,#00ffd5); color:#000; border:none; border-radius:50px; font-weight:700; cursor:pointer; }
+.btn-buy:not(:disabled):hover { transform:scale(1.05); }
+.btn-buy:disabled { opacity:0.5; cursor:not-allowed; }
+.admin-actions button { padding:9px 20px; margin:0 6px; border:none; border-radius:25px; cursor:pointer; }
+.btn-edit { background:#ffd700; color:#000; }
+.btn-delete { background:#ff4757; color:white; }
+
+.stock { font-size:15px; font-weight:600; margin:10px 0; padding:6px 14px; border-radius:20px; display:inline-block; background:rgba(0,255,0,0.2); color:#a0ff80; }
+.stock.out-of-stock { background:rgba(255,0,0,0.25); color:#ff6b6b; }
+
+.modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); z-index:1000; justify-content:center; align-items:center; }
+.modal-content { background:rgba(255,255,255,0.2); padding:40px; border-radius:28px; width:90%; max-width:520px; backdrop-filter:blur(20px); box-shadow:0 30px 80px rgba(0,0,0,0.7); border:1px solid rgba(255,255,255,0.2); position:relative; }
+.close { position:absolute; top:15px; right:25px; font-size:40px; cursor:pointer; color:white; }
+
+.input-row { margin:18px 0; }
+.input-row input, .input-row textarea {
+  width:100% !important; padding:16px 20px !important; border-radius:50px !important;
+  border:none !important; background:rgba(255,255,255,0.18) !important;
+  color:white !important; font-size:16px !important; outline:none !important;
+}
+.input-row input::placeholder, .input-row textarea::placeholder { color:#cce0ff !important; opacity:0.8; }
+
+/* GIÁ TIỀN ĐẸP */
+#giaSP {
+  border:2px solid #00f0ff !important;
+  background:rgba(0,240,255,0.15) !important;
+}
+#giaSP:focus { box-shadow:0 0 20px rgba(0,240,255,0.6) !important; }
+
+/* TỒN KHO – GIỐNG HỆT Ô TÊN SẢN PHẨM */
+#tonKhoSP {
+  border:none !important;
+  background:rgba(255,255,255,0.18) !important;
+  color:white !important;
+}
+
+/* ẨN NÚT TĂNG GIẢM CHO CẢ GIÁ VÀ TỒN KHO */
+#giaSP, #tonKhoSP {
+  -moz-appearance: textfield !important;
+  -webkit-appearance: textfield !important;
+  appearance: textfield !important;
+}
+#giaSP::-webkit-outer-spin-button,
+#giaSP::-webkit-inner-spin-button,
+#tonKhoSP::-webkit-outer-spin-button,
+#tonKhoSP::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+  display: none !important;
+}
+
+.upload-area { border:2px dashed #00f0ff; border-radius:16px; padding:40px; text-align:center; cursor:pointer; margin:20px 0; }
+.upload-area:hover { background:rgba(0,240,255,0.1); }
+.modal-buttons { text-align:center; margin-top:25px; }
+.modal-buttons button { padding:14px 36px; margin:0 10px; border:none; border-radius:50px; font-size:16px; cursor:pointer; }
+.btn-cancel { background:rgba(255,255,255,0.3); color:white; }
+.no-data { grid-column:1/-1; font-size:26px; color:#a0c0ff; padding:100px; }
