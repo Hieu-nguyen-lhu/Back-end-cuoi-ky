@@ -10,32 +10,55 @@ namespace back_end_cuoi_ky.Controllers
     {
         private readonly JwtService _jwt;
 
-        // List Admin & User
-        private readonly Dictionary<string, string> Admins = new Dictionary<string, string>
+        // Static dictionary lưu Admin & User
+        private static readonly Dictionary<string, string> Admins = new()
         {
             { "admin", "123" }, { "admin1","123"}, { "admin2","123"}, { "admin3","123"}
         };
-        private readonly Dictionary<string, string> Users = new Dictionary<string, string>
+
+        private static readonly Dictionary<string, string> Users = new()
         {
             { "user","321"}, { "user1","321"}, { "user2","321"}, { "user3","321"}
         };
 
         // Lưu token hiện tại của mỗi user
-        private static Dictionary<string, (string Token, DateTime Expiry)> _userTokens
-            = new Dictionary<string, (string Token, DateTime Expiry)>();
+        private static readonly Dictionary<string, (string Token, DateTime Expiry)> _userTokens
+            = new();
 
-        private const int TokenExpireMinutes = 2;
+        private const int TokenExpireMinutes = 30;
 
         public AuthController(JwtService jwt)
         {
             _jwt = jwt;
         }
 
+        // -----------------------
+        // REGISTER
+        // -----------------------
+        [HttpPost("register")]
+        public IActionResult Register([FromBody] LoginRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
+                return BadRequest(new { success = false, message = "Username and password are required" });
+
+            // Check trùng username
+            if (Admins.ContainsKey(request.Username) || Users.ContainsKey(request.Username))
+                return BadRequest(new { success = false, message = "Username already exists" });
+
+            // Thêm user mới
+            Users[request.Username] = request.Password;
+
+            return Ok(new { success = true, message = "Register successful" });
+        }
+
+        // -----------------------
+        // LOGIN
+        // -----------------------
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
-                return BadRequest(new { message = "Username and password are required" });
+                return BadRequest(new { success = false, message = "Username and password are required" });
 
             string role = null;
 
@@ -44,57 +67,60 @@ namespace back_end_cuoi_ky.Controllers
             else if (Users.ContainsKey(request.Username) && Users[request.Username] == request.Password)
                 role = "User";
             else
-                return Unauthorized(new { message = "Invalid username or password" });
+                return Unauthorized(new { success = false, message = "Invalid username or password" });
 
-            // Nếu token cũ hết hạn → remove khỏi dictionary
+            // Token cũ
             if (_userTokens.ContainsKey(request.Username))
             {
                 var (oldToken, expiry) = _userTokens[request.Username];
-                if (expiry <= DateTime.UtcNow)
-                    _userTokens.Remove(request.Username);
+                if (expiry > DateTime.UtcNow)
+                    return BadRequest(new { success = false, message = "User already has a valid token" });
                 else
-                    return BadRequest(new { message = "User already has a valid token" });
+                    _userTokens.Remove(request.Username);
             }
 
             string token = _jwt.GenerateToken(request.Username, role, TokenExpireMinutes);
             _userTokens[request.Username] = (token, DateTime.UtcNow.AddMinutes(TokenExpireMinutes));
 
-            return Ok(new { username = request.Username, role, token });
+            return Ok(new { success = true, data = new { username = request.Username, role, token } });
         }
 
+        // -----------------------
+        // REFRESH TOKEN
+        // -----------------------
         [HttpPost("refresh")]
         public IActionResult Refresh([FromBody] LoginRequest request)
         {
-            string username = request.Username;
+            if (string.IsNullOrWhiteSpace(request.Username))
+                return BadRequest(new { success = false, message = "Username is required" });
+
             string role = null;
+            if (Admins.ContainsKey(request.Username)) role = "Admin";
+            else if (Users.ContainsKey(request.Username)) role = "User";
+            else return Unauthorized(new { success = false, message = "Invalid username" });
 
-            if (Admins.ContainsKey(username))
-                role = "Admin";
-            else if (Users.ContainsKey(username))
-                role = "User";
-            else
-                return Unauthorized(new { message = "Invalid username" });
-
-            // Kiểm tra token cũ
-            if (_userTokens.ContainsKey(username))
+            if (_userTokens.ContainsKey(request.Username))
             {
-                var (oldToken, expiry) = _userTokens[username];
+                var (oldToken, expiry) = _userTokens[request.Username];
+                if (expiry > DateTime.UtcNow)
+                    return BadRequest(new { success = false, message = "Token still valid, cannot refresh yet" });
 
-                if (expiry <= DateTime.UtcNow)
-                {
-                    // Token hết hạn → xóa token cũ để tạo token mới
-                    _userTokens.Remove(username);
-                }
-                else
-                {
-                    return BadRequest(new { message = "Token still valid, cannot refresh yet" });
-                }
+                _userTokens.Remove(request.Username);
             }
 
-            string newToken = _jwt.GenerateToken(username, role, TokenExpireMinutes);
-            _userTokens[username] = (newToken, DateTime.UtcNow.AddMinutes(TokenExpireMinutes));
+            string newToken = _jwt.GenerateToken(request.Username, role, TokenExpireMinutes);
+            _userTokens[request.Username] = (newToken, DateTime.UtcNow.AddMinutes(TokenExpireMinutes));
 
-            return Ok(new { username, role, token = newToken });
+            return Ok(new { success = true, data = new { username = request.Username, role, token = newToken } });
         }
+    }
+
+    // -----------------------
+    // DTO login/register
+    // -----------------------
+    public class LoginRequest
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 }
