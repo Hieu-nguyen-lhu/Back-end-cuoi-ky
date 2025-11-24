@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lBXq/tXec2F4OaB9cm9UKF3k5RtC40eBSyzxb8DxhoIbaNYbOo0dPZDT8QPy8AAIKdbBICpO45W7y/lPXi/e8Q==",
+  "dgSpecHash": "re1vpmvPsjv3y+sprHGGxX4dzqSLAf1GKlho2xwu2Kds3aHHFg4e3Rr1KvZzdAEEzkECpdA/XViXRgrFKITs0w==",
   "success": true,
-  "projectFilePath": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\back_end_cuoi_ky\\back_end_cuoi_ky.csproj",
+  "projectFilePath": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\Back-end-cuoi-ky\\back_end_cuoi_ky.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\nguyenduchieu\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\nguyenduchieu\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.0\\microsoft.aspnetcore.openapi.7.0.0.nupkg.sha512",
