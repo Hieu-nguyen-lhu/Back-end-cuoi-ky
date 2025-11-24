@@ -12,7 +12,7 @@ using back_end_cuoi_ky.Data;
 namespace back_end_cuoi_ky.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20251120172033_InitialCreate")]
+    [Migration("20251124183926_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -166,6 +166,49 @@ namespace back_end_cuoi_ky.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("back_end_cuoi_ky.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("back_end_cuoi_ky.Models.Order", b =>
                 {
                     b.HasOne("back_end_cuoi_ky.Models.Customer", "Customer")
@@ -194,6 +237,16 @@ namespace back_end_cuoi_ky.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("back_end_cuoi_ky.Models.User", b =>
+                {
+                    b.HasOne("back_end_cuoi_ky.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("back_end_cuoi_ky.Models.Customer", b =>

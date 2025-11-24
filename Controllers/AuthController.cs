@@ -3,7 +3,6 @@ using back_end_cuoi_ky.Models;
 using back_end_cuoi_ky.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using back_end_cuoi_ky.Services;
 
 namespace back_end_cuoi_ky.Controllers
 {
@@ -13,23 +12,6 @@ namespace back_end_cuoi_ky.Controllers
     {
         private readonly IJwtService _jwt;
         private readonly ApplicationDbContext _context;
-
-        // Static dictionary lưu Admin & User (dùng tạm, production nên dùng database)
-        private static readonly Dictionary<string, string> Admins = new()
-        {
-            { "admin", "123" }, 
-            { "admin1", "123" }, 
-            { "admin2", "123" }, 
-            { "admin3", "123" }
-        };
-
-        private static readonly Dictionary<string, string> Users = new()
-        {
-            { "user", "321" }, 
-            { "user1", "321" }, 
-            { "user2", "321" }, 
-            { "user3", "321" }
-        };
 
         public AuthController(IJwtService jwt, ApplicationDbContext context)
         {
@@ -41,36 +23,53 @@ namespace back_end_cuoi_ky.Controllers
         // REGISTER
         // -----------------------
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] LoginRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
                 return BadRequest(new { success = false, message = "Username and password are required" });
 
             // Check trùng username
-            if (Admins.ContainsKey(request.Username) || Users.ContainsKey(request.Username))
+            var existingUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == request.Username);
+            if (existingUser != null)
                 return BadRequest(new { success = false, message = "Username already exists" });
 
-            // ✅ Tạo Customer tương ứng trong database
-            var customer = new Models.Customer
+            // ✅ Tạo Customer tương ứng trong database (nếu register là User)
+            Customer? customer = null;
+            if (request.Role == "User")
             {
-                Name = request.Username,
-                Email = $"{request.Username}@example.com", // Email mặc định
-                Phone = "0000000000", // Phone mặc định
-                Address = "",
+                customer = new Models.Customer
+                {
+                    Name = request.Username,
+                    Email = request.Email ?? $"{request.Username}@example.com",
+                    Phone = request.Phone ?? "0000000000",
+                    Address = request.Address ?? "",
+                    CreatedAt = DateTime.Now
+                };
+                _context.Customers.Add(customer);
+                await _context.SaveChangesAsync();
+            }
+
+            // Tạo User mới
+            var newUser = new Models.User
+            {
+                Username = request.Username,
+                Password = request.Password, // ⚠️ Production: hash password with BCrypt!
+                Role = request.Role ?? "User",
+                Email = request.Email,
+                CustomerId = customer?.Id,
                 CreatedAt = DateTime.Now
             };
 
-            _context.Customers.Add(customer);
+            _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
-
-            // Thêm user mới
-            Users[request.Username] = request.Password;
 
             return Ok(new 
             { 
                 success = true, 
                 message = "Register successful",
-                customerId = customer.Id 
+                userId = newUser.Id,
+                customerId = customer?.Id 
             });
         }
 
@@ -83,35 +82,23 @@ namespace back_end_cuoi_ky.Controllers
             if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
                 return BadRequest(new { success = false, message = "Username and password are required" });
 
-            string role = null;
-            int customerId = 0;
+            // Tìm User trong database
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == request.Username);
 
-            if (Admins.ContainsKey(request.Username) && Admins[request.Username] == request.Password)
-            {
-                role = "Admin";
-            }
-            else if (Users.ContainsKey(request.Username) && Users[request.Username] == request.Password)
-            {
-                role = "User";
-                
-                // ✅ Lấy CustomerId từ database
-                var customer = await _context.Customers
-                    .FirstOrDefaultAsync(c => c.Name == request.Username);
-                
-                if (customer == null)
-                {
-                    return Unauthorized(new { success = false, message = "Customer not found in database" });
-                }
-                
-                customerId = customer.Id;
-            }
-            else
-            {
+            if (user == null || user.Password != request.Password)
                 return Unauthorized(new { success = false, message = "Invalid username or password" });
+
+            int customerId = 0;
+            
+            // Nếu là User, lấy CustomerId
+            if (user.Role == "User" && user.CustomerId.HasValue)
+            {
+                customerId = user.CustomerId.Value;
             }
 
-            // ✅ Tạo token với customerId
-            string token = _jwt.GenerateToken(request.Username, role, customerId);
+            // Tạo token
+            string token = _jwt.GenerateToken(request.Username, user.Role, customerId);
 
             return Ok(new 
             { 
@@ -119,9 +106,9 @@ namespace back_end_cuoi_ky.Controllers
                 data = new 
                 { 
                     username = request.Username, 
-                    role, 
+                    role = user.Role, 
                     token,
-                    customerId = role == "User" ? customerId : 0
+                    customerId = user.Role == "User" ? customerId : 0
                 } 
             });
         }
@@ -137,10 +124,21 @@ namespace back_end_cuoi_ky.Controllers
         }
     }
 
-    // DTO login/register
+    // DTO for login
     public class LoginRequest
     {
         public string Username { get; set; }
         public string Password { get; set; }
+    }
+
+    // DTO for register
+    public class RegisterRequest
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string? Email { get; set; }
+        public string? Phone { get; set; }
+        public string? Address { get; set; }
+        public string Role { get; set; } = "User"; // Default: User, can be "Admin"
     }
 }

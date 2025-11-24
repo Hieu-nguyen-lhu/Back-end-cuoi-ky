@@ -61,10 +61,19 @@ namespace back_end_cuoi_ky.Services
             if (product == null)
                 return null;
 
-            product.Name = dto.Name;
-            product.Price = dto.Price;
-            product.Description = dto.Description;
-            product.Stock = dto.Stock;
+            // ✅ Partial update: only update fields that are provided (not null)
+            if (!string.IsNullOrWhiteSpace(dto.Name))
+                product.Name = dto.Name;
+
+            if (dto.Price.HasValue)
+                product.Price = dto.Price.Value;
+
+            if (dto.Description != null)
+                product.Description = dto.Description;
+
+            if (dto.Stock.HasValue)
+                product.Stock = dto.Stock.Value;
+
             product.UpdatedAt = DateTime.Now;
 
             await _context.SaveChangesAsync();

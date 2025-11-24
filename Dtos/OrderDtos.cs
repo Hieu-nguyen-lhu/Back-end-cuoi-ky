@@ -17,12 +17,11 @@ namespace back_end_cuoi_ky.Dtos
         public List<CreateOrderDetailDto> OrderDetails { get; set; }
     }
 
-    // DTO cho Request update Order
+    // DTO cho Request update Order (partial update - chỉ update những field được gửi)
     public class UpdateOrderDto
     {
-        [Required(ErrorMessage = "Trạng thái là bắt buộc")]
         [StringLength(50)]
-        public string Status { get; set; }
+        public string? Status { get; set; }
     }
 
     // DTO cho Response Order

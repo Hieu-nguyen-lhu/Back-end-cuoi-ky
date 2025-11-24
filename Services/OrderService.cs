@@ -118,7 +118,10 @@ namespace back_end_cuoi_ky.Services
             if (order == null)
                 return null;
 
-            order.Status = dto.Status;
+            // ✅ Partial update: only update Status if provided (not null)
+            if (!string.IsNullOrWhiteSpace(dto.Status))
+                order.Status = dto.Status;
+
             order.UpdatedAt = DateTime.Now;
 
             await _context.SaveChangesAsync();

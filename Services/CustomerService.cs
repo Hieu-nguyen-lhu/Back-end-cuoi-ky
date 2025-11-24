@@ -68,16 +68,26 @@ namespace back_end_cuoi_ky.Services
             if (customer == null)
                 return null;
 
-            // Kiểm tra email đã tồn tại (trừ chính khách hàng này)
-            if (await EmailExistsAsync(dto.Email, id))
+            // ✅ Partial update: only update fields that are provided (not null)
+            if (!string.IsNullOrWhiteSpace(dto.Name))
+                customer.Name = dto.Name;
+
+            if (!string.IsNullOrWhiteSpace(dto.Email))
             {
-                throw new InvalidOperationException("Email đã tồn tại trong hệ thống");
+                // Kiểm tra email đã tồn tại (trừ chính khách hàng này)
+                if (await EmailExistsAsync(dto.Email, id))
+                {
+                    throw new InvalidOperationException("Email đã tồn tại trong hệ thống");
+                }
+                customer.Email = dto.Email;
             }
 
-            customer.Name = dto.Name;
-            customer.Email = dto.Email;
-            customer.Phone = dto.Phone;
-            customer.Address = dto.Address;
+            if (!string.IsNullOrWhiteSpace(dto.Phone))
+                customer.Phone = dto.Phone;
+
+            if (dto.Address != null)
+                customer.Address = dto.Address;
+
             customer.UpdatedAt = DateTime.Now;
 
             await _context.SaveChangesAsync();

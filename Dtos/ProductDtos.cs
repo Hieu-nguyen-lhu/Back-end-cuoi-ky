@@ -21,23 +21,20 @@ namespace back_end_cuoi_ky.Dtos
         public int Stock { get; set; }
     }
 
-    // DTO cho Request update Product
+    // DTO cho Request update Product (partial update - chỉ update những field được gửi)
     public class UpdateProductDto
     {
-        [Required(ErrorMessage = "Tên sản phẩm là bắt buộc")]
         [StringLength(200, ErrorMessage = "Tên sản phẩm không được quá 200 ký tự")]
-        public string Name { get; set; }
+        public string? Name { get; set; }
 
-        [Required(ErrorMessage = "Giá là bắt buộc")]
         [Range(0, double.MaxValue, ErrorMessage = "Giá phải >= 0")]
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
 
         [StringLength(1000, ErrorMessage = "Mô tả không được quá 1000 ký tự")]
         public string? Description { get; set; }
 
-        [Required(ErrorMessage = "Tồn kho là bắt buộc")]
         [Range(0, int.MaxValue, ErrorMessage = "Tồn kho phải >= 0")]
-        public int Stock { get; set; }
+        public int? Stock { get; set; }
     }
 
     // DTO cho Response Product
