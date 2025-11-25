@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ULhL/J62LJY=",
+  "dgSpecHash": "T58eP9adZaI=",
   "success": true,
-  "projectFilePath": "D:\\Back-end_CuoiKy\\Back-end-cuoi-ky\\back_end_cuoi_ky.csproj",
+  "projectFilePath": "D:\\Back-end_CuoiKy\\Back-end-cuoi-ky_\\back_end_cuoi_ky.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\MSI\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\MSI\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\8.0.0\\microsoft.aspnetcore.authentication.jwtbearer.8.0.0.nupkg.sha512",

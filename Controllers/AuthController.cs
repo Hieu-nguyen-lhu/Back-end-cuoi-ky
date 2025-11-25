@@ -1,6 +1,8 @@
+using back_end_cuoi_ky.Data;
 using back_end_cuoi_ky.Models;
 using back_end_cuoi_ky.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace back_end_cuoi_ky.Controllers
 {
@@ -8,119 +10,135 @@ namespace back_end_cuoi_ky.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly JwtService _jwt;
+        private readonly IJwtService _jwt;
+        private readonly ApplicationDbContext _context;
 
-        // Static dictionary lưu Admin & User
-        private static readonly Dictionary<string, string> Admins = new()
-        {
-            { "admin", "123" }, { "admin1","123"}, { "admin2","123"}, { "admin3","123"}
-        };
-
-        private static readonly Dictionary<string, string> Users = new()
-        {
-            { "user","321"}, { "user1","321"}, { "user2","321"}, { "user3","321"}
-        };
-
-        // Lưu token hiện tại của mỗi user
-        private static readonly Dictionary<string, (string Token, DateTime Expiry)> _userTokens
-            = new();
-
-        private const int TokenExpireMinutes = 30;
-
-        public AuthController(JwtService jwt)
+        public AuthController(IJwtService jwt, ApplicationDbContext context)
         {
             _jwt = jwt;
+            _context = context;
         }
 
         // -----------------------
         // REGISTER
         // -----------------------
         [HttpPost("register")]
-        public IActionResult Register([FromBody] LoginRequest request)
+        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
                 return BadRequest(new { success = false, message = "Username and password are required" });
 
             // Check trùng username
-            if (Admins.ContainsKey(request.Username) || Users.ContainsKey(request.Username))
+            var existingUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == request.Username);
+            if (existingUser != null)
                 return BadRequest(new { success = false, message = "Username already exists" });
 
-            // Thêm user mới
-            Users[request.Username] = request.Password;
+            // ✅ Tạo Customer tương ứng trong database (nếu register là User)
+            Customer? customer = null;
+            if (request.Role == "User")
+            {
+                customer = new Models.Customer
+                {
+                    Name = request.Username,
+                    Email = request.Email ?? $"{request.Username}@example.com",
+                    Phone = request.Phone ?? "0000000000",
+                    Address = request.Address ?? "",
+                    CreatedAt = DateTime.Now
+                };
+                _context.Customers.Add(customer);
+                await _context.SaveChangesAsync();
+            }
 
-            return Ok(new { success = true, message = "Register successful" });
+            // Tạo User mới
+            var newUser = new Models.User
+            {
+                Username = request.Username,
+                Password = request.Password, // ⚠️ Production: hash password with BCrypt!
+                Role = request.Role ?? "User",
+                Email = request.Email,
+                CustomerId = customer?.Id,
+                CreatedAt = DateTime.Now
+            };
+
+            _context.Users.Add(newUser);
+            await _context.SaveChangesAsync();
+
+            return Ok(new 
+            { 
+                success = true, 
+                message = "Register successful",
+                userId = newUser.Id,
+                customerId = customer?.Id 
+            });
         }
 
         // -----------------------
         // LOGIN
         // -----------------------
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             if (string.IsNullOrWhiteSpace(request.Username) || string.IsNullOrWhiteSpace(request.Password))
                 return BadRequest(new { success = false, message = "Username and password are required" });
 
-            string role = null;
+            // Tìm User trong database
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == request.Username);
 
-            if (Admins.ContainsKey(request.Username) && Admins[request.Username] == request.Password)
-                role = "Admin";
-            else if (Users.ContainsKey(request.Username) && Users[request.Username] == request.Password)
-                role = "User";
-            else
+            if (user == null || user.Password != request.Password)
                 return Unauthorized(new { success = false, message = "Invalid username or password" });
 
-            // Token cũ
-            if (_userTokens.ContainsKey(request.Username))
+            int customerId = 0;
+            
+            // Nếu là User, lấy CustomerId
+            if (user.Role == "User" && user.CustomerId.HasValue)
             {
-                var (oldToken, expiry) = _userTokens[request.Username];
-                if (expiry > DateTime.UtcNow)
-                    return BadRequest(new { success = false, message = "User already has a valid token" });
-                else
-                    _userTokens.Remove(request.Username);
+                customerId = user.CustomerId.Value;
             }
 
-            string token = _jwt.GenerateToken(request.Username, role, TokenExpireMinutes);
-            _userTokens[request.Username] = (token, DateTime.UtcNow.AddMinutes(TokenExpireMinutes));
+            // Tạo token
+            string token = _jwt.GenerateToken(request.Username, user.Role, customerId);
 
-            return Ok(new { success = true, data = new { username = request.Username, role, token } });
+            return Ok(new 
+            { 
+                success = true, 
+                data = new 
+                { 
+                    username = request.Username, 
+                    role = user.Role, 
+                    token,
+                    customerId = user.Role == "User" ? customerId : 0
+                } 
+            });
         }
 
         // -----------------------
-        // REFRESH TOKEN
+        // LOGOUT (Optional - client-side xóa token)
         // -----------------------
-        [HttpPost("refresh")]
-        public IActionResult Refresh([FromBody] LoginRequest request)
+        [HttpPost("logout")]
+        public IActionResult Logout()
         {
-            if (string.IsNullOrWhiteSpace(request.Username))
-                return BadRequest(new { success = false, message = "Username is required" });
-
-            string role = null;
-            if (Admins.ContainsKey(request.Username)) role = "Admin";
-            else if (Users.ContainsKey(request.Username)) role = "User";
-            else return Unauthorized(new { success = false, message = "Invalid username" });
-
-            if (_userTokens.ContainsKey(request.Username))
-            {
-                var (oldToken, expiry) = _userTokens[request.Username];
-                if (expiry > DateTime.UtcNow)
-                    return BadRequest(new { success = false, message = "Token still valid, cannot refresh yet" });
-
-                _userTokens.Remove(request.Username);
-            }
-
-            string newToken = _jwt.GenerateToken(request.Username, role, TokenExpireMinutes);
-            _userTokens[request.Username] = (newToken, DateTime.UtcNow.AddMinutes(TokenExpireMinutes));
-
-            return Ok(new { success = true, data = new { username = request.Username, role, token = newToken } });
+            // JWT stateless nên logout chủ yếu xử lý ở client (xóa token)
+            return Ok(new { success = true, message = "Logout successful" });
         }
     }
 
-    // -----------------------
-    // DTO login/register
-    // -----------------------
+    // DTO for login
     public class LoginRequest
     {
         public string Username { get; set; }
         public string Password { get; set; }
+    }
+
+    // DTO for register
+    public class RegisterRequest
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string? Email { get; set; }
+        public string? Phone { get; set; }
+        public string? Address { get; set; }
+        public string Role { get; set; } = "User"; // Default: User, can be "Admin"
     }
 }

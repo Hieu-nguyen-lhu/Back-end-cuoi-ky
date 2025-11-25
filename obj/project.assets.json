@@ -2373,11 +2373,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Back-end_CuoiKy\\Back-end-cuoi-ky\\back_end_cuoi_ky.csproj",
+      "projectUniqueName": "D:\\Back-end_CuoiKy\\Back-end-cuoi-ky_\\back_end_cuoi_ky.csproj",
       "projectName": "back_end_cuoi_ky",
-      "projectPath": "D:\\Back-end_CuoiKy\\Back-end-cuoi-ky\\back_end_cuoi_ky.csproj",
+      "projectPath": "D:\\Back-end_CuoiKy\\Back-end-cuoi-ky_\\back_end_cuoi_ky.csproj",
       "packagesPath": "C:\\Users\\MSI\\.nuget\\packages\\",
-      "outputPath": "D:\\Back-end_CuoiKy\\Back-end-cuoi-ky\\obj\\",
+      "outputPath": "D:\\Back-end_CuoiKy\\Back-end-cuoi-ky_\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "D:\\visual\\tools\\NuGetPackages"
