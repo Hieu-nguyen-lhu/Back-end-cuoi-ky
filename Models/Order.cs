@@ -21,6 +21,12 @@ namespace back_end_cuoi_ky.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal TotalAmount { get; set; } = 0;
 
+        [StringLength(20)]
+        public string PhoneNumber { get; set; }
+
+        [StringLength(255)]
+        public string DeliveryAddress { get; set; }
+
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime? UpdatedAt { get; set; }
 

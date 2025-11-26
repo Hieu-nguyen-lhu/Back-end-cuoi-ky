@@ -16,6 +16,9 @@ namespace back_end_cuoi_ky.Dtos
         [StringLength(1000, ErrorMessage = "Mô tả không được quá 1000 ký tự")]
         public string? Description { get; set; }
 
+        [StringLength(500)]
+        public string? ImageUrl { get; set; }
+
         [Required(ErrorMessage = "Tồn kho là bắt buộc")]
         [Range(0, int.MaxValue, ErrorMessage = "Tồn kho phải >= 0")]
         public int Stock { get; set; }
@@ -33,6 +36,9 @@ namespace back_end_cuoi_ky.Dtos
         [StringLength(1000, ErrorMessage = "Mô tả không được quá 1000 ký tự")]
         public string? Description { get; set; }
 
+        [StringLength(500)]
+        public string? ImageUrl { get; set; }
+
         [Range(0, int.MaxValue, ErrorMessage = "Tồn kho phải >= 0")]
         public int? Stock { get; set; }
     }
@@ -44,6 +50,7 @@ namespace back_end_cuoi_ky.Dtos
         public string Name { get; set; }
         public decimal Price { get; set; }
         public string? Description { get; set; }
+        public string? ImageUrl { get; set; }
         public int Stock { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }

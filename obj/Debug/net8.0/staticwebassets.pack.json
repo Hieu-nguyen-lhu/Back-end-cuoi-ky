@@ -1,0 +1,69 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\Back-end-cuoi-ky\\wwwroot\\admin-orders.html",
+      "PackagePath": "staticwebassets\\admin-orders.html"
+    },
+    {
+      "Id": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\Back-end-cuoi-ky\\wwwroot\\admin-products.html",
+      "PackagePath": "staticwebassets\\admin-products.html"
+    },
+    {
+      "Id": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\Back-end-cuoi-ky\\wwwroot\\app.js",
+      "PackagePath": "staticwebassets\\app.js"
+    },
+    {
+      "Id": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\Back-end-cuoi-ky\\wwwroot\\cart.html",
+      "PackagePath": "staticwebassets\\cart.html"
+    },
+    {
+      "Id": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\Back-end-cuoi-ky\\wwwroot\\index.html",
+      "PackagePath": "staticwebassets\\index.html"
+    },
+    {
+      "Id": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\Back-end-cuoi-ky\\wwwroot\\login.html",
+      "PackagePath": "staticwebassets\\login.html"
+    },
+    {
+      "Id": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\Back-end-cuoi-ky\\wwwroot\\my-orders.html",
+      "PackagePath": "staticwebassets\\my-orders.html"
+    },
+    {
+      "Id": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\Back-end-cuoi-ky\\wwwroot\\order-detail.html",
+      "PackagePath": "staticwebassets\\order-detail.html"
+    },
+    {
+      "Id": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\Back-end-cuoi-ky\\wwwroot\\products.html",
+      "PackagePath": "staticwebassets\\products.html"
+    },
+    {
+      "Id": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\Back-end-cuoi-ky\\wwwroot\\register.html",
+      "PackagePath": "staticwebassets\\register.html"
+    },
+    {
+      "Id": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\Back-end-cuoi-ky\\wwwroot\\styles.css",
+      "PackagePath": "staticwebassets\\styles.css"
+    },
+    {
+      "Id": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\Back-end-cuoi-ky\\wwwroot\\uploads\\products\\fd3077ad-7c37-442d-b997-c6524bc3e725.png",
+      "PackagePath": "staticwebassets\\uploads\\products\\fd3077ad-7c37-442d-b997-c6524bc3e725.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.back_end_cuoi_ky.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.back_end_cuoi_ky.props",
+      "PackagePath": "build\\back_end_cuoi_ky.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.back_end_cuoi_ky.props",
+      "PackagePath": "buildMultiTargeting\\back_end_cuoi_ky.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.back_end_cuoi_ky.props",
+      "PackagePath": "buildTransitive\\back_end_cuoi_ky.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

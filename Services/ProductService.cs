@@ -45,6 +45,7 @@ namespace back_end_cuoi_ky.Services
                 Name = dto.Name,
                 Price = dto.Price,
                 Description = dto.Description,
+                ImageUrl = dto.ImageUrl,
                 Stock = dto.Stock,
                 CreatedAt = DateTime.Now
             };
@@ -74,6 +75,10 @@ namespace back_end_cuoi_ky.Services
             if (dto.Stock.HasValue)
                 product.Stock = dto.Stock.Value;
 
+            // ImageUrl có thể được cập nhật từ DTO nếu cần
+            if (!string.IsNullOrWhiteSpace(dto.ImageUrl))
+                product.ImageUrl = dto.ImageUrl;
+
             product.UpdatedAt = DateTime.Now;
 
             await _context.SaveChangesAsync();
@@ -101,6 +106,7 @@ namespace back_end_cuoi_ky.Services
                 Name = product.Name,
                 Price = product.Price,
                 Description = product.Description,
+                ImageUrl = product.ImageUrl,
                 Stock = product.Stock,
                 CreatedAt = product.CreatedAt,
                 UpdatedAt = product.UpdatedAt

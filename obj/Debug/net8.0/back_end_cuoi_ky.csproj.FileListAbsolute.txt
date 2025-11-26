@@ -209,3 +209,4 @@ D:\Back-end_CuoiKy\Back-end-cuoi-ky\obj\Debug\net8.0\back_end_cuoi_ky.genruntime
 D:\Back-end_CuoiKy\Back-end-cuoi-ky\obj\Debug\net8.0\ref\back_end_cuoi_ky.dll
 >>>>>>> origin/Loc_back_end_ck
 C:\Users\nguyenduchieu\Downloads\Lập trình\back-end-ck\Back-end-cuoi-ky\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\nguyenduchieu\Downloads\Lập trình\back-end-ck\Back-end-cuoi-ky\bin\Debug\net8.0\back_end_cuoi_ky.staticwebassets.runtime.json

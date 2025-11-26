@@ -49,6 +49,12 @@ namespace back_end_cuoi_ky.Services
 
         public async Task<OrderDto> CreateAsync(CreateOrderDto dto)
         {
+            // Validate input
+            if (dto.OrderDetails == null || !dto.OrderDetails.Any())
+            {
+                throw new InvalidOperationException("Đơn hàng phải có ít nhất 1 sản phẩm");
+            }
+
             // Kiểm tra Customer có tồn tại không
             var customer = await _context.Customers.FindAsync(dto.CustomerId);
             if (customer == null)
@@ -63,6 +69,8 @@ namespace back_end_cuoi_ky.Services
                 OrderDate = DateTime.Now,
                 Status = dto.Status,
                 TotalAmount = 0,
+                PhoneNumber = dto.PhoneNumber,
+                DeliveryAddress = dto.DeliveryAddress,
                 CreatedAt = DateTime.Now
             };
 
@@ -176,6 +184,8 @@ namespace back_end_cuoi_ky.Services
                 TotalAmount = order.TotalAmount,
                 CreatedAt = order.CreatedAt,
                 UpdatedAt = order.UpdatedAt,
+                PhoneNumber = order.PhoneNumber ?? "",
+                DeliveryAddress = order.DeliveryAddress ?? "",
                 OrderDetails = order.OrderDetails?.Select(od => new OrderDetailDto
                 {
                     Id = od.Id,

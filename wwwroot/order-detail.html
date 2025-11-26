@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Đơn Hàng</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1>🛍️ Quản Lý Bán Hàng</h1>
+            <div id="navMenu" class="nav-menu">
+                <a href="index.html" class="nav-link">Trang Chủ</a>
+                <a href="products.html" class="nav-link" id="navProducts" style="display:none;">Sản Phẩm</a>
+                <a href="admin-products.html" class="nav-link" id="navAdmin" style="display:none;">Quản Lý Sản Phẩm</a>
+                <a href="my-orders.html" class="nav-link" id="navMyOrders" style="display:none;">Đơn Hàng Của Tôi</a>
+                <a href="cart.html" class="nav-link" id="navCart" style="display:none;">
+                    🛒 Giỏ Hàng <span id="cartCount" class="badge">0</span>
+                </a>
+                <button id="logoutBtn" class="btn btn-danger" style="display:none;">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Chi Tiết Đơn Hàng</h2>
+        
+        <div id="orderContainer" style="display:none;">
+            <div class="order-info">
+                <p><strong>ID Đơn Hàng:</strong> <span id="orderId"></span></p>
+                <p><strong>Khách Hàng:</strong> <span id="customerName"></span></p>
+                <p><strong>Ngày Tạo:</strong> <span id="orderDate"></span></p>
+                <p><strong>Trạng Thái:</strong> <span id="orderStatus"></span></p>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Sản Phẩm</th>
+                        <th>Giá</th>
+                        <th>Số Lượng</th>
+                        <th>Thành Tiền</th>
+                    </tr>
+                </thead>
+                <tbody id="orderDetails">
+                </tbody>
+            </table>
+
+            <div class="order-summary">
+                <h3>Tổng Tiền: <span id="totalAmount">0</span> VNĐ</h3>
+            </div>
+
+            <div style="margin-top: 20px;">
+                <a href="products.html" class="btn btn-primary">Tiếp Tục Mua Sắm</a>
+            </div>
+        </div>
+
+        <div id="loadingMessage" class="message message-info">
+            Đang tải chi tiết đơn hàng...
+        </div>
+
+        <div id="errorMessage" class="message message-error" style="display:none;">
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth('User');
+            loadOrderDetail();
+            updateNavigation();
+        });
+
+        function getOrderIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('id');
+        }
+
+        async function loadOrderDetail() {
+            const orderId = getOrderIdFromUrl();
+            
+            if (!orderId) {
+                showError('Không tìm thấy ID đơn hàng');
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_URL}/orders/${orderId}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Không tìm thấy đơn hàng');
+                }
+
+                const data = await response.json();
+                const order = data.data;
+
+                document.getElementById('orderId').textContent = order.id;
+                document.getElementById('customerName').textContent = order.customerName;
+                document.getElementById('orderDate').textContent = new Date(order.orderDate).toLocaleString('vi-VN');
+                document.getElementById('orderStatus').textContent = order.status;
+                document.getElementById('totalAmount').textContent = order.totalAmount.toLocaleString('vi-VN');
+
+                const orderDetailsBody = document.getElementById('orderDetails');
+                orderDetailsBody.innerHTML = '';
+
+                if (order.orderDetails && order.orderDetails.length > 0) {
+                    order.orderDetails.forEach(detail => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${detail.productName}</td>
+                            <td>${detail.unitPrice.toLocaleString('vi-VN')} VNĐ</td>
+                            <td>${detail.quantity}</td>
+                            <td>${detail.subtotal.toLocaleString('vi-VN')} VNĐ</td>
+                        `;
+                        orderDetailsBody.appendChild(row);
+                    });
+                }
+
+                document.getElementById('loadingMessage').style.display = 'none';
+                document.getElementById('orderContainer').style.display = 'block';
+            } catch (error) {
+                console.error('Lỗi:', error);
+                showError(error.message);
+            }
+        }
+
+        function showError(message) {
+            document.getElementById('loadingMessage').style.display = 'none';
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorMessage').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

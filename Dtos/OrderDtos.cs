@@ -15,6 +15,12 @@ namespace back_end_cuoi_ky.Dtos
         [Required(ErrorMessage = "Chi tiết đơn hàng là bắt buộc")]
         [MinLength(1, ErrorMessage = "Đơn hàng phải có ít nhất 1 sản phẩm")]
         public List<CreateOrderDetailDto> OrderDetails { get; set; }
+
+        [StringLength(20)]
+        public string PhoneNumber { get; set; }
+
+        [StringLength(255)]
+        public string DeliveryAddress { get; set; }
     }
 
     // DTO cho Request update Order (partial update - chỉ update những field được gửi)
@@ -36,6 +42,8 @@ namespace back_end_cuoi_ky.Dtos
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public List<OrderDetailDto>? OrderDetails { get; set; }
+        public string PhoneNumber { get; set; }
+        public string DeliveryAddress { get; set; }
     }
 
     // DTO chi tiết cho Create OrderDetail

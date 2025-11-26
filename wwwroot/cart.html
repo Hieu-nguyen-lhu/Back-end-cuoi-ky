@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ Hàng</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1>🛍️ Quản Lý Bán Hàng</h1>
+            <div id="navMenu" class="nav-menu">
+                <a href="index.html" class="nav-link">Trang Chủ</a>
+                <a href="products.html" class="nav-link" id="navProducts">Sản Phẩm</a>
+                <a href="admin-products.html" class="nav-link" id="navAdmin" style="display:none;">Quản Lý Sản Phẩm</a>
+                <a href="admin-orders.html" class="nav-link" id="navAdminOrders" style="display:none;">Quản Lý Đơn Hàng</a>
+                <a href="my-orders.html" class="nav-link" id="navMyOrders" style="display:none;">Đơn Hàng Của Tôi</a>
+                <a href="cart.html" class="nav-link" id="navCart">🛒 Giỏ Hàng</a>
+                <button id="logoutBtn" class="logout-btn" style="display:none;">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Giỏ Hàng</h2>
+        
+        <div id="cartContainer" style="display:none;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Sản Phẩm</th>
+                        <th>Giá</th>
+                        <th>Số Lượng</th>
+                        <th>Thành Tiền</th>
+                        <th>Hành Động</th>
+                    </tr>
+                </thead>
+                <tbody id="cartItems">
+                </tbody>
+            </table>
+
+            <div style="background: white; padding: 20px; border-radius: 8px; margin-top: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                <h3 style="margin-bottom: 20px; color: #2c3e50;">Thông Tin Giao Hàng</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label for="phoneNumber">Số Điện Thoại:</label>
+                        <input type="tel" id="phoneNumber" name="phoneNumber" required placeholder="Nhập số điện thoại" pattern="[0-9]{10,11}">
+                    </div>
+                    <div class="form-group">
+                        <label for="deliveryAddress">Địa Chỉ Giao Hàng:</label>
+                        <input type="text" id="deliveryAddress" name="deliveryAddress" required placeholder="Nhập địa chỉ giao hàng">
+                    </div>
+                </div>
+            </div>
+
+            <div class="cart-summary">
+                <h3>Tổng Cộng: <span id="totalAmount">0</span> VNĐ</h3>
+                <button id="checkoutBtn" class="btn btn-primary" style="margin-right: 10px;">Thanh Toán</button>
+                <a href="products.html" class="btn btn-secondary">Tiếp Tục Mua Sắm</a>
+            </div>
+        </div>
+
+        <div id="emptyCart" class="message message-info" style="display:none;">
+            Giỏ hàng trống. <a href="products.html">Tiếp tục mua sắm</a>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth('User');
+            loadCart();
+            updateNavigation();
+        });
+
+        function loadCart() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const cartContainer = document.getElementById('cartContainer');
+            const emptyCart = document.getElementById('emptyCart');
+            const cartItems = document.getElementById('cartItems');
+
+            if (cart.length === 0) {
+                cartContainer.style.display = 'none';
+                emptyCart.style.display = 'block';
+                return;
+            }
+
+            cartContainer.style.display = 'block';
+            emptyCart.style.display = 'none';
+            cartItems.innerHTML = '';
+
+            let total = 0;
+            cart.forEach((item, index) => {
+                const subtotal = item.price * item.quantity;
+                total += subtotal;
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>${item.price.toLocaleString('vi-VN')} VNĐ</td>
+                    <td>
+                        <input type="number" value="${item.quantity}" min="1" max="999" 
+                            onchange="updateQuantity(${index}, this.value)" class="quantity-input">
+                    </td>
+                    <td>${subtotal.toLocaleString('vi-VN')} VNĐ</td>
+                    <td><button class="btn btn-danger" onclick="removeFromCart(${index})">Xóa</button></td>
+                `;
+                cartItems.appendChild(row);
+            });
+
+            document.getElementById('totalAmount').textContent = total.toLocaleString('vi-VN');
+        }
+
+        function updateQuantity(index, newQuantity) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const quantity = parseInt(newQuantity);
+            
+            if (quantity > 0) {
+                cart[index].quantity = quantity;
+                localStorage.setItem('cart', JSON.stringify(cart));
+                loadCart();
+                updateCartCount();
+            }
+        }
+
+        function removeFromCart(index) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            loadCart();
+            updateCartCount();
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const cartCountElements = document.querySelectorAll('#cartCount');
+            cartCountElements.forEach(el => {
+                el.textContent = count;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            if (checkoutBtn) {
+                checkoutBtn.onclick = checkout;
+            }
+        });
+
+        async function checkout() {
+             const cart = JSON.parse(localStorage.getItem('cart')) || [];
+             if (cart.length === 0) {
+                 alert('Giỏ hàng trống!');
+                 return;
+             }
+        
+             // Kiểm tra thông tin giao hàng
+             const phoneNumber = document.getElementById('phoneNumber').value.trim();
+             const deliveryAddress = document.getElementById('deliveryAddress').value.trim();
+             
+             if (!phoneNumber) {
+                 alert('Vui lòng nhập số điện thoại');
+                 return;
+             }
+             if (!deliveryAddress) {
+                 alert('Vui lòng nhập địa chỉ giao hàng');
+                 return;
+             }
+        
+             const customerId = parseInt(localStorage.getItem('customerId'));
+             if (!customerId) {
+                 alert('Không tìm thấy thông tin khách hàng');
+                 return;
+             }
+        
+             try {
+                 const orderDetails = cart.map(item => ({
+                     productId: item.id,
+                     quantity: item.quantity
+                 }));
+        
+                 const response = await fetch(`${API_URL}/orders`, {
+                     method: 'POST',
+                     headers: {
+                         'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                         'Content-Type': 'application/json'
+                     },
+                     body: JSON.stringify({
+                         customerId: customerId,
+                         status: 'Pending',
+                         orderDetails: orderDetails,
+                         phoneNumber: phoneNumber,
+                         deliveryAddress: deliveryAddress
+                     })
+                 });
+        
+                 if (!response.ok) {
+                     const errorData = await response.json();
+                     throw new Error(errorData.message || 'Tạo đơn hàng thất bại');
+                 }
+        
+                 const data = await response.json();
+                 const orderId = data.data ? data.data.id : data.id;
+                 
+                 // Xóa giỏ hàng
+                 localStorage.removeItem('cart');
+                 updateCartCount();
+                 
+                 // Hiển thị thông báo thành công
+                 showSuccessPage(orderId);
+             } catch (error) {
+                 console.error('Lỗi:', error);
+                 alert('Lỗi: ' + error.message);
+             }
+         }
+
+         function showSuccessPage(orderId) {
+              const cartContainer = document.getElementById('cartContainer');
+              const emptyCart = document.getElementById('emptyCart');
+              
+              cartContainer.style.display = 'none';
+              emptyCart.style.display = 'block';
+              
+              emptyCart.innerHTML = `
+                  <div class="message message-success" style="text-align: center; padding: 40px;">
+                      <h2 style="color: #155724; margin-bottom: 20px;">✓ Thanh Toán Thành Công!</h2>
+                      <p style="font-size: 16px; margin-bottom: 10px;">Đơn hàng của bạn đã được tạo thành công</p>
+                      <p style="font-size: 16px; margin-bottom: 30px;"><strong>Mã đơn hàng: #${orderId}</strong></p>
+                      <div>
+                          <a href="my-orders.html" class="btn btn-primary" style="margin-right: 10px;">Xem Đơn Hàng Của Tôi</a>
+                          <a href="products.html" class="btn btn-secondary" style="margin-right: 10px;">Tiếp Tục Mua Sắm</a>
+                          <a href="index.html" class="btn btn-secondary">Về Trang Chủ</a>
+                      </div>
+                  </div>
+              `;
+          }
+
+        updateCartCount();
+    </script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản Phẩm</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1>🛍️ Quản Lý Bán Hàng</h1>
+            <div id="navMenu" class="nav-menu">
+                <a href="index.html" class="nav-link">Trang Chủ</a>
+                <a href="products.html" class="nav-link" id="navProducts">Sản Phẩm</a>
+                <a href="admin-products.html" class="nav-link" id="navAdmin" style="display:none;">Quản Lý Sản Phẩm</a>
+                <a href="admin-orders.html" class="nav-link" id="navAdminOrders" style="display:none;">Quản Lý Đơn Hàng</a>
+                <a href="my-orders.html" class="nav-link" id="navMyOrders" style="display:none;">Đơn Hàng Của Tôi</a>
+                <a href="cart.html" class="nav-link" id="navCart">
+                    🛒 Giỏ Hàng <span id="cartCount" class="badge">0</span>
+                </a>
+                <button id="logoutBtn" class="logout-btn" style="display:none;">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2>Danh Sách Sản Phẩm</h2>
+        
+        <div id="productsGrid" class="products-grid">
+            <!-- Sản phẩm sẽ được thêm vào đây bằng JavaScript -->
+        </div>
+
+        <div id="noProducts" class="message message-info">
+            Đang tải sản phẩm...
+        </div>
+    </div>
+
+    <!-- Modal chi tiết sản phẩm -->
+    <div id="productModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h3 id="modalTitle"></h3>
+            <div class="modal-body">
+                <p><strong>Giá:</strong> <span id="modalPrice"></span> VNĐ</p>
+                <p><strong>Tồn kho:</strong> <span id="modalStock"></span></p>
+                <p><strong>Mô tả:</strong> <span id="modalDescription"></span></p>
+                <div class="form-group">
+                    <label for="quantityInput">Số lượng:</label>
+                    <input type="number" id="quantityInput" min="1" value="1">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="addToCartBtn" class="btn btn-primary">Thêm vào giỏ hàng</button>
+                <button class="btn btn-secondary close-modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        let currentProductId = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth('User');
+            loadProducts();
+            updateNavigation();
+            setupModal();
+        });
+
+        async function loadProducts() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_URL}/products`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Lỗi tải sản phẩm');
+
+                const data = await response.json();
+                const products = data.data;
+                const productsGrid = document.getElementById('productsGrid');
+                const noProducts = document.getElementById('noProducts');
+
+                if (products.length === 0) {
+                    productsGrid.style.display = 'none';
+                    noProducts.textContent = 'Không có sản phẩm nào';
+                    noProducts.style.display = 'block';
+                    return;
+                }
+
+                productsGrid.innerHTML = '';
+                noProducts.style.display = 'none';
+
+                products.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+                    
+                    // Tạo img element nếu có hình ảnh
+                    if (product.imageUrl && product.imageUrl.trim() !== '') {
+                        const img = document.createElement('img');
+                        img.src = product.imageUrl;
+                        img.alt = product.name;
+                        img.style.cssText = 'width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 10px;';
+                        img.onerror = function() {
+                            this.style.display = 'none';
+                            const placeholder = document.createElement('div');
+                            placeholder.style.cssText = 'width: 100%; height: 200px; background-color: #ddd; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;';
+                            placeholder.textContent = 'Không có hình ảnh';
+                            this.parentElement.insertBefore(placeholder, this);
+                        };
+                        card.appendChild(img);
+                    } else {
+                        const placeholder = document.createElement('div');
+                        placeholder.style.cssText = 'width: 100%; height: 200px; background-color: #ddd; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;';
+                        placeholder.textContent = 'Không có hình ảnh';
+                        card.appendChild(placeholder);
+                    }
+                    
+                    // Thêm thông tin sản phẩm
+                    const content = document.createElement('div');
+                    content.innerHTML = `
+                        <h3>${product.name}</h3>
+                        <p class="price">${product.price.toLocaleString('vi-VN')} VNĐ</p>
+                        <p class="stock">Tồn kho: ${product.stock}</p>
+                        <p class="description">${product.description || 'Không có mô tả'}</p>
+                        <button class="btn btn-primary" onclick="openProductModal(${product.id}, '${product.name.replace(/'/g, "\\'")}', ${product.price}, ${product.stock}, '${(product.description || '').replace(/'/g, "\\'")}')">
+                            Thêm vào giỏ
+                        </button>
+                    `;
+                    card.appendChild(content);
+                    productsGrid.appendChild(card);
+                });
+            } catch (error) {
+                console.error('Lỗi:', error);
+                document.getElementById('noProducts').textContent = 'Lỗi tải sản phẩm';
+                document.getElementById('noProducts').style.display = 'block';
+            }
+        }
+
+        function openProductModal(id, name, price, stock, description) {
+            currentProductId = id;
+            document.getElementById('modalTitle').textContent = name;
+            document.getElementById('modalPrice').textContent = price.toLocaleString('vi-VN');
+            document.getElementById('modalStock').textContent = stock;
+            document.getElementById('modalDescription').textContent = description || 'Không có mô tả';
+            document.getElementById('quantityInput').value = 1;
+            document.getElementById('quantityInput').max = stock;
+            document.getElementById('productModal').style.display = 'block';
+        }
+
+        function setupModal() {
+            const modal = document.getElementById('productModal');
+            const closeBtn = document.querySelector('.close');
+            const closeModalBtn = document.querySelector('.close-modal');
+
+            closeBtn.onclick = () => modal.style.display = 'none';
+            closeModalBtn.onclick = () => modal.style.display = 'none';
+            window.onclick = (event) => {
+                if (event.target === modal) modal.style.display = 'none';
+            };
+
+            document.getElementById('addToCartBtn').onclick = addToCart;
+        }
+
+        function addToCart() {
+            const quantity = parseInt(document.getElementById('quantityInput').value);
+            if (quantity <= 0) {
+                alert('Số lượng phải lớn hơn 0');
+                return;
+            }
+
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            const existingItem = cart.find(item => item.id === currentProductId);
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                // Lấy giá từ modal, loại bỏ tất cả ký tự không phải số
+                const priceText = document.getElementById('modalPrice').textContent;
+                const price = parseFloat(priceText.replace(/\D/g, '')) || 0;
+                
+                const product = {
+                    id: currentProductId,
+                    name: document.getElementById('modalTitle').textContent,
+                    price: price,
+                    quantity: quantity
+                };
+                cart.push(product);
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            
+            // Đóng modal
+            document.getElementById('productModal').style.display = 'none';
+            
+            // Hiển thị thông báo
+            alert('Đã thêm vào giỏ hàng! Tổng: ' + quantity + ' sản phẩm');
+        }
+
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        updateCartCount();
+    </script>
+</body>
+</html>

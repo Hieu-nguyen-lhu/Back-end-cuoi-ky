@@ -20,6 +20,9 @@ namespace back_end_cuoi_ky.Models
         [StringLength(1000)]
         public string? Description { get; set; }
 
+        [StringLength(500)]
+        public string? ImageUrl { get; set; }
+
         [Required]
         [Range(0, int.MaxValue, ErrorMessage = "Tồn kho phải >= 0")]
         public int Stock { get; set; }

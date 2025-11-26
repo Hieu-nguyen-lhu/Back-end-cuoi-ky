@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Bán Hàng</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Hero Section - Chưa đăng nhập */
+        #heroSection {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+            border-radius: 0 0 50px 50px;
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.3);
+        }
+        #heroSection h1 {
+            font-size: 56px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        #heroSection p {
+            font-size: 20px;
+            opacity: 0.9;
+            margin-bottom: 32px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .btn-primary {
+            display: inline-block;
+            background: #ff6b6b;
+            color: white;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 18px;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.4);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.5);
+        }
+
+        /* Features Section */
+        #featuresSection {
+            padding: 100px 0;
+            background: white;
+        }
+        #featuresSection h2 {
+            text-align: center;
+            font-size: 40px;
+            margin-bottom: 60px;
+            color: #1e293b;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .feature-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: transform 0.3s;
+            border: 1px solid #f1f5f9;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        .feature-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        .feature-card h3 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: #1e293b;
+        }
+
+        /* User Dashboard */
+        #userDashboard {
+            padding: 80px 0;
+            min-height: 80vh;
+        }
+        #userDashboard h2 {
+            font-size: 42px;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #1e293b;
+        }
+        #userDashboard h2 span {
+            color: #6366f1;
+        }
+
+        .dashboard-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        .action-card {
+            background: white;
+            padding: 50px 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+        }
+        .action-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        .action-card h3 {
+            font-size: 24px;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+
+        /* Stats Section */
+        #statsSection {
+            margin: 80px 0;
+        }
+        #statsSection h3 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 40px;
+            color: #1e293b;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        .stat-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        }
+        .stat-card h3 {
+            font-size: 42px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+        .stat-card p {
+            color: #64748b;
+            font-size: 16px;
+        }
+
+        /* Featured Products */
+        #featuredSection h3 {
+            text-align: center;
+            font-size: 32px;
+            margin: 80px 0 40px;
+            color: #1e293b;
+        }
+        #featuredProducts {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 30px;
+        }
+        .product-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        .product-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8;
+            font-size: 14px;
+        }
+        .product-info {
+            padding: 20px;
+        }
+        .product-info h4 {
+            font-size: 18px;
+            margin-bottom: 8px;
+            color: #1e293b;
+            font-weight: 600;
+        }
+        .product-price {
+            color: #ef4444;
+            font-size: 20px;
+            font-weight: 700;
+        }
+        .product-stock {
+            color: #64748b;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 768px) {
+            #heroSection h1 { font-size: 42px; }
+            #heroSection p { font-size: 18px; }
+            #userDashboard h2 { font-size: 34px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Giữ nguyên navbar cũ của bạn -->
+    <nav class="navbar">
+        <div class="container">
+            <h1>Quản Lý Bán Hàng</h1>
+            <div id="navMenu" class="nav-menu">
+                <a href="index.html" class="nav-link">Trang Chủ</a>
+                <a href="products.html" class="nav-link" id="navProducts" style="display:none;">Sản Phẩm</a>
+                <a href="admin-products.html" class="nav-link" id="navAdmin" style="display:none;">Quản Lý Sản Phẩm</a>
+                <a href="admin-orders.html" class="nav-link" id="navAdminOrders" style="display:none;">Quản Lý Đơn Hàng</a>
+                <a href="my-orders.html" class="nav-link" id="navMyOrders" style="display:none;">Đơn Hàng Của Tôi</a>
+                <a href="cart.html" class="nav-link" id="navCart" style="display:none;">
+                    Giỏ Hàng <span id="cartCount" class="badge">0</span>
+                </a>
+                <a href="login.html" class="nav-link" id="navLogin">Đăng Nhập</a>
+                <button id="logoutBtn" class="logout-btn" style="display:none;">Đăng Xuất</button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="dashboardContent">
+        <!-- Hero khi chưa đăng nhập -->
+        <div id="heroSection">
+            <div class="container">
+                <h1>Cửa Hàng Bán Hàng Online</h1>
+                <p>Khám phá hàng ngàn sản phẩm chất lượng cao với giá tốt nhất Việt Nam</p>
+                <a href="login.html" class="btn-primary">Đăng Nhập Ngay</a>
+            </div>
+        </div>
+
+        <!-- 4 lý do chọn chúng tôi -->
+        <div id="featuresSection">
+            <div class="container">
+                <h2>Tại Sao Chọn Chúng Tôi?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">✓</div>
+                        <h3>Sản Phẩm Chất Lượng</h3>
+                        <p>Cam kết 100% chính hãng từ các thương hiệu uy tín</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">Fast Delivery</div>
+                        <h3>Giao Hàng Siêu Tốc</h3>
+                        <p>Nội thành 2h • Toàn quốc 1-2 ngày</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">Low Price</div>
+                        <h3>Giá Luôn Rẻ Nhất</h3>
+                        <p>Cam kết hoàn tiền nếu tìm được nơi rẻ hơn</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">Gift</div>
+                        <h3>Quà Tặng Hấp Dẫn</h3>
+                        <p>Ưu đãi mỗi ngày • Freeship toàn quốc từ 300k</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard khi đã đăng nhập -->
+        <div id="userDashboard" style="display: none;">
+            <div class="container">
+                <h2>Xin Chào <span id="userGreeting">Bạn</span>!</h2>
+
+                <div class="dashboard-actions">
+                    <a href="products.html" id="linkShop" style="display: none;" class="action-card" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                        <div style="font-size: 70px;">Shopping</div>
+                        <h3>Mua Sắm Sản Phẩm</h3>
+                    </a>
+
+                    <div id="linkAdmin" style="display: none;" class="dashboard-actions">
+                        <a href="admin-products.html" class="action-card" style="background: linear-gradient(135deg, #34d399, #10b981); color: white;">
+                            <div style="font-size: 60px;">Package</div>
+                            <h3>Quản Lý Sản Phẩm</h3>
+                        </a>
+                        <a href="admin-orders.html" class="action-card" style="background: linear-gradient(135deg, #f87171, #ef4444); color: white;">
+                            <div style="font-size: 60px;">Clipboard</div>
+                            <h3>Quản Lý Đơn Hàng</h3>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Thống kê Admin -->
+                <div id="statsSection" style="display: none;">
+                    <h3>Thống Kê Tổng Quan</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3 style="color: #6366f1;" id="statProducts">-</h3>
+                            <p>Tổng Sản Phẩm</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 style="color: #f59e0b;" id="statOrders">-</h3>
+                            <p>Tổng Đơn Hàng</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 style="color: #10b981;" id="statDelivered">-</h3>
+                            <p>Đã Giao Hàng</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sản phẩm nổi bật -->
+                <div id="featuredSection" style="display: none;">
+                    <h3>Sản Phẩm Nổi Bật</h3>
+                    <div id="featuredProducts"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNavigation();
+            setupHomePage();
+        });
+
+        // Giữ nguyên toàn bộ logic JS cũ của bạn, chỉ thay đổi phần render giao diện
+        async function loadFeaturedProducts() {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_URL}/products`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) return;
+
+                const data = await response.json();
+                const products = (Array.isArray(data) ? data : data.data || []).slice(0, 8);
+                const container = document.getElementById('featuredProducts');
+                container.innerHTML = '';
+
+                products.forEach(product => {
+                    const card = document.createElement('div');
+                    card.className = 'product-card';
+
+                    const img = product.imageUrl?.trim() 
+                        ? `<img src="${product.imageUrl}" class="product-img" alt="${product.name}" onerror="this.style.display='none'">`
+                        : `<div class="product-img">Không có ảnh</div>`;
+
+                    card.innerHTML = `
+                        ${img}
+                        <div class="product-info">
+                            <h4>${product.name}</h4>
+                            <div class="product-price">${product.price.toLocaleString('vi-VN')} VNĐ</div>
+                            <div class="product-stock">Còn lại: ${product.stock}</div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } catch (err) { console.error(err); }
+        }
+
+        // loadAdminStats() load thống kê từ API
+        async function loadAdminStats() {
+            try {
+                const token = localStorage.getItem('token');
+                
+                // Load tổng sản phẩm
+                const productsRes = await fetch(`${API_URL}/products`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (productsRes.ok) {
+                    const productsData = await productsRes.json();
+                    const products = Array.isArray(productsData) ? productsData : (productsData.data || []);
+                    document.getElementById('statProducts').textContent = products.length;
+                } else {
+                    document.getElementById('statProducts').textContent = '0';
+                }
+
+                // Load tổng đơn hàng
+                const ordersRes = await fetch(`${API_URL}/orders`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (ordersRes.ok) {
+                    const ordersData = await ordersRes.json();
+                    const orders = Array.isArray(ordersData) ? ordersData : (ordersData.data || []);
+                    document.getElementById('statOrders').textContent = orders.length;
+                    
+                    // Đơn hàng đã giao
+                    const deliveredCount = orders.filter(o => o.status === 'Delivered').length;
+                    document.getElementById('statDelivered').textContent = deliveredCount;
+                } else {
+                    document.getElementById('statOrders').textContent = '0';
+                    document.getElementById('statDelivered').textContent = '0';
+                }
+            } catch (error) {
+                console.error('Lỗi tải thống kê:', error);
+                document.getElementById('statProducts').textContent = '0';
+                document.getElementById('statOrders').textContent = '0';
+                document.getElementById('statDelivered').textContent = '0';
+            }
+        }
+
+        function setupHomePage() {
+             const token = localStorage.getItem('token');
+             const role = localStorage.getItem('role');
+             const username = localStorage.getItem('username');
+        
+             if (!token) {
+                 // Chưa đăng nhập: hiển thị hero + features
+                 document.getElementById('heroSection').style.display = 'block';
+                 document.getElementById('featuresSection').style.display = 'block';
+             } else {
+                 // Đã đăng nhập: giữ hero, ẩn nút Đăng Nhập Ngay, hiển thị content
+                 document.getElementById('heroSection').style.display = 'block';
+                 document.querySelector('a[href="login.html"].btn-primary').style.display = 'none';
+                 document.getElementById('featuresSection').style.display = 'none';
+                 document.getElementById('userDashboard').style.display = 'block';
+                 document.getElementById('userGreeting').textContent = username || 'Bạn';
+        
+                 if (role === 'User') {
+                     document.getElementById('linkShop').style.display = 'block';
+                     document.getElementById('featuredSection').style.display = 'block';
+                     loadFeaturedProducts();
+                 } else if (role === 'Admin') {
+                     document.getElementById('linkAdmin').style.display = 'grid';
+                     document.getElementById('statsSection').style.display = 'block';
+                     loadAdminStats();
+                 }
+             }
+         }
+    </script>
+</body>
+</html>

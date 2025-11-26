@@ -90,6 +90,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// ✅ Serve static files from wwwroot
+app.UseStaticFiles();
+
 app.UseCors("AllowAll");
 
 // ✅ QUAN TRỌNG: Phải có 2 middleware này

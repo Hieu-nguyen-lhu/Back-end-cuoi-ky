@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1>🛍️ Quản Lý Bán Hàng</h1>
+            <div id="navMenu" class="nav-menu">
+                <a href="index.html" class="nav-link">Trang Chủ</a>
+                <a href="login.html" class="nav-link">Đăng Nhập</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="form-container">
+            <h2>Đăng Nhập</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Tên đăng nhập:</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Mật khẩu:</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Đăng Nhập</button>
+                <p style="margin-top: 20px;">Chưa có tài khoản? <a href="register.html">Đăng ký ngay</a></p>
+            </form>
+            <div id="message" class="message" style="display:none;"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', handleLogin);
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+
+            try {
+                const response = await fetch(`${API_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    // Lưu token và role vào localStorage
+                    localStorage.setItem('token', data.data.token);
+                    localStorage.setItem('role', data.data.role);
+                    localStorage.setItem('username', data.data.username);
+                    localStorage.setItem('customerId', data.data.customerId);
+
+                    showMessage('Đăng nhập thành công!', 'success', messageDiv);
+                    
+                    // Chuyển hướng theo vai trò
+                    setTimeout(() => {
+                        if (data.data.role === 'Admin') {
+                            window.location.href = 'admin-products.html';
+                        } else {
+                            window.location.href = 'products.html';
+                        }
+                    }, 1000);
+                } else {
+                    showMessage(data.message || 'Đăng nhập thất bại', 'error', messageDiv);
+                }
+            } catch (error) {
+                console.error('Lỗi:', error);
+                showMessage('Lỗi kết nối đến server', 'error', messageDiv);
+            }
+        }
+
+        function showMessage(msg, type, element) {
+            element.textContent = msg;
+            element.className = `message message-${type}`;
+            element.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
