@@ -294,24 +294,22 @@
         <!-- Dashboard khi đã đăng nhập -->
         <div id="userDashboard" style="display: none;">
             <div class="container">
-                <h2>Xin Chào <span id="userGreeting">Bạn</span>!</h2>
+                 <h2>Xin Chào <span id="userGreeting">Bạn</span>!</h2>
 
-                <div class="dashboard-actions">
-                    <a href="products.html" id="linkShop" style="display: none;" class="action-card" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                <div class="dashboard-actions" id="dashboardActionsContainer">
+                    <a href="products.html" id="linkShop" style="display: none; background: linear-gradient(135deg, #667eea, #764ba2); color: white;" class="action-card">
                         <div style="font-size: 70px;">Shopping</div>
                         <h3>Mua Sắm Sản Phẩm</h3>
                     </a>
 
-                    <div id="linkAdmin" style="display: none;" class="dashboard-actions">
-                        <a href="admin-products.html" class="action-card" style="background: linear-gradient(135deg, #34d399, #10b981); color: white;">
-                            <div style="font-size: 60px;">Package</div>
-                            <h3>Quản Lý Sản Phẩm</h3>
-                        </a>
-                        <a href="admin-orders.html" class="action-card" style="background: linear-gradient(135deg, #f87171, #ef4444); color: white;">
-                            <div style="font-size: 60px;">Clipboard</div>
-                            <h3>Quản Lý Đơn Hàng</h3>
-                        </a>
-                    </div>
+                    <a href="admin-products.html" id="linkAdminProducts" style="display: none; background: linear-gradient(135deg, #34d399, #10b981); color: white;" class="action-card">
+                        <div style="font-size: 60px;">Package</div>
+                        <h3>Quản Lý Sản Phẩm</h3>
+                    </a>
+                    <a href="admin-orders.html" id="linkAdminOrders" style="display: none; background: linear-gradient(135deg, #f87171, #ef4444); color: white;" class="action-card">
+                        <div style="font-size: 60px;">Clipboard</div>
+                        <h3>Quản Lý Đơn Hàng</h3>
+                    </a>
                 </div>
 
                 <!-- Thống kê Admin -->
@@ -447,7 +445,8 @@
                      document.getElementById('featuredSection').style.display = 'block';
                      loadFeaturedProducts();
                  } else if (role === 'Admin') {
-                     document.getElementById('linkAdmin').style.display = 'grid';
+                     document.getElementById('linkAdminProducts').style.display = 'block';
+                     document.getElementById('linkAdminOrders').style.display = 'block';
                      document.getElementById('statsSection').style.display = 'block';
                      loadAdminStats();
                  }
