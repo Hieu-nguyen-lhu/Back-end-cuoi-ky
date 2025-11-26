@@ -105,6 +105,7 @@
             </div>
             <div class="modal-footer">
                 <button id="updateStatusBtn" class="btn btn-primary">Cập nhật</button>
+                <button id="deleteOrderBtn" class="btn btn-danger">Xóa Đơn Hàng</button>
                 <button class="btn btn-secondary close-modal">Đóng</button>
             </div>
         </div>
@@ -303,6 +304,35 @@
             };
 
             document.getElementById('updateStatusBtn').onclick = updateOrderStatus;
+            document.getElementById('deleteOrderBtn').onclick = deleteOrder;
+        }
+
+        async function deleteOrder() {
+            if (!confirm('Bạn chắc chắn muốn xóa đơn hàng này? Dữ liệu sẽ không thể khôi phục.')) {
+                return;
+            }
+
+            try {
+                const token = localStorage.getItem('token');
+                const response = await fetch(`${API_URL}/orders/${currentOrderId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Lỗi xóa đơn hàng');
+                }
+
+                alert('Xóa đơn hàng thành công!');
+                document.getElementById('orderModal').style.display = 'none';
+                loadOrders();
+            } catch (error) {
+                console.error('Lỗi:', error);
+                alert('Lỗi: ' + error.message);
+            }
         }
 
         async function updateOrderStatus() {

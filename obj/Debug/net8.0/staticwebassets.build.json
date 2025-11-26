@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "b2uRcilCvgyVFjMCbfUIqtuu5KktL1J4sq1syDo3LH0=",
+  "Hash": "iG9NpqwG2Gm8Xr1NWRpyh7PLVykMrgqsYyRQ6Bx/IbQ=",
   "Source": "back_end_cuoi_ky",
   "BasePath": "_content/back_end_cuoi_ky",
   "Mode": "Default",
@@ -224,6 +224,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\styles.css"
+    },
+    {
+      "Identity": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\Back-end-cuoi-ky\\wwwroot\\uploads\\products\\beb83065-ae08-4371-88c3-8a8f3f39c4a4.jpg",
+      "SourceId": "back_end_cuoi_ky",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\Back-end-cuoi-ky\\wwwroot\\",
+      "BasePath": "_content/back_end_cuoi_ky",
+      "RelativePath": "uploads/products/beb83065-ae08-4371-88c3-8a8f3f39c4a4.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\products\\beb83065-ae08-4371-88c3-8a8f3f39c4a4.jpg"
     },
     {
       "Identity": "C:\\Users\\nguyenduchieu\\Downloads\\Lập trình\\back-end-ck\\Back-end-cuoi-ky\\wwwroot\\uploads\\products\\fd3077ad-7c37-442d-b997-c6524bc3e725.png",

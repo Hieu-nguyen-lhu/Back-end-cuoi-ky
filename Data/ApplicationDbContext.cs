@@ -38,7 +38,7 @@ namespace back_end_cuoi_ky.Data
                 .HasOne(od => od.Product)
                 .WithMany(p => p.OrderDetails)
                 .HasForeignKey(od => od.ProductId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
 
             // Configure User -> Customer relationship
             modelBuilder.Entity<User>()
